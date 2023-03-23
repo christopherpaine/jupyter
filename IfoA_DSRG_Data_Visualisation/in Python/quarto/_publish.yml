@@ -1,0 +1,4 @@
+- source: 3D_Mortality_Surface_Plot_Python.qmd
+  quarto-pub:
+    - id: 48631339-a0e6-41a3-af0d-efead22e142d
+      url: 'https://quartopub.com/sites/cjpaine/3d_mortality_surface_plot_python-1248'

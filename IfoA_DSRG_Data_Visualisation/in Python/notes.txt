@@ -1,0 +1,3 @@
+needed this to sort out kernel in vscode jupyter with virtual env:  python -m ipykernel install --user --display-name "myenv" --name "myenv"
+
+cannot quite recall why we have this additional quarto folder.  is this produced when publishing to quartopub?

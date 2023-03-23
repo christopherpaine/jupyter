@@ -1,0 +1,39 @@
+---
+title:  3D_Mortality_Surface_Plot_Python
+format: html
+editor: visual
+---
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.colors
+import plotly.graph_objs as go
+from scipy.interpolate import griddata
+df = pd.read_csv('https://raw.githubusercontent.com/christopherpaine/MDD/main/Mortality_tables/HMD_UK_males_1x1.csv',header=0)
+x, y, z = (np.array(df[df['Age']!='110+'][col], dtype=float) for col in ['Age', 'Year', 'qx'])
+xi, yi = np.linspace(x.min(), x.max(), 100), np.linspace(y.min(), y.max(), 100)
+# create data
+xi_n = xi
+yi_n = yi
+Xn, Yn = np.meshgrid(xi_n, yi_n)
+Z = griddata((x,y),z,(Xn,Yn), method='cubic')
+z_log = np.log10(Z)
+# create plot
+fig = go.Figure(
+    
+    go.Surface(x=xi_n, y=yi_n, z=Z, surfacecolor=z_log, colorscale ='Blues'),
+    layout=dict(scene=dict(zaxis_type="log",
+                           zaxis=dict(gridcolor='black', gridwidth=0.5,
+                                      tickvals=[round(np.min(Z),5), 0.0001,0.001, 0.01, 0.1, np.max(Z)],
+                                    ticktext=['0', '0.0001' ,'0.001', '0.01', '0.1', '1']),
+                           xaxis=dict(gridcolor='black', gridwidth=0.5,),
+                           yaxis=dict(gridcolor='black', gridwidth=0.5,))
+                ,width=800, height=800,template='plotly_white'  )
+                )
+
+fig.update_traces(showscale=True)
+tickvals=np.log10([round(np.min(Z),5), 0.0001,0.001, 0.01, 0.1, np.max(Z)])
+tickvals[0]=np.log10(1e-6)
+fig.update_traces(colorbar=dict(tickmode='array',tickvals=tickvals,ticktext=['0', '0.0001', '0.001', '0.01', '0.1', '1'],len=0.85))
+fig.show()
+```
